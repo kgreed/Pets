@@ -44,6 +44,9 @@ namespace Pets.Module.BusinessObjects
               .HasDiscriminator(x => x.IsCat)
               .HasValue<Kitten>(true)
               .HasValue<Puppy>(false);
+
+            modelBuilder.Entity<Puppy>().HasOne(x => x.Parent).WithMany(x => x.Puppies);
+            modelBuilder.Entity<Kitten>().HasOne(x => x.Parent).WithMany(x => x.Kittens);
         }
     }
 }
