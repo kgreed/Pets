@@ -17,7 +17,7 @@ namespace Pets.Module.BusinessObjects {
 
 		[Key] public int Id { get; set; }
 		public string Name { get; set; }
-		public int PetType { get; set; }
+		public bool? IsCat { get; set; }
 
 	}
 	[NavigationItem("Pets")]
@@ -70,9 +70,11 @@ namespace Pets.Module.BusinessObjects {
                 b.HasIndex(nameof(DevExpress.ExpressApp.Security.ISecurityUserLoginInfo.LoginProviderName), nameof(DevExpress.ExpressApp.Security.ISecurityUserLoginInfo.ProviderUserKey)).IsUnique();
             });
 			modelBuilder.Entity<Pet>()
-			  .HasDiscriminator(x => x.PetType)
-			  .HasValue<Cat>(1)
-			  .HasValue<Dog>(2);
+			  .HasDiscriminator<bool?>("IsCat")
+			  .HasValue<Cat>(true)
+			  .HasValue<Dog>(false);
+			 // .HasValue<Pet>(null);
+			 // .IsComplete(false);
 
 		}
 	}
