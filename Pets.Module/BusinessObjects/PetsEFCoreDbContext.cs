@@ -36,12 +36,12 @@ namespace Pets.Module.BusinessObjects
                 b.HasIndex(nameof(DevExpress.ExpressApp.Security.ISecurityUserLoginInfo.LoginProviderName), nameof(DevExpress.ExpressApp.Security.ISecurityUserLoginInfo.ProviderUserKey)).IsUnique();
             });
             modelBuilder.Entity<Pet>()
-              .HasDiscriminator<bool?>("IsCat")
+              .HasDiscriminator(x=> x.IsCat)
               .HasValue<Cat>(true)
               .HasValue<Dog>(false);
 
             modelBuilder.Entity<BabyPet>()
-              .HasDiscriminator<bool?>("IsCat")
+              .HasDiscriminator(x => x.IsCat)
               .HasValue<Kitten>(true)
               .HasValue<Puppy>(false);
         }
