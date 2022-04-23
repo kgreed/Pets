@@ -7,10 +7,31 @@ using DevExpress.Persistent.BaseImpl.EF;
 using DevExpress.ExpressApp.Design;
 using DevExpress.ExpressApp.EFCore.DesignTime;
 using DevExpress.Persistent.BaseImpl.EFCore.AuditTrail;
+using System.ComponentModel.DataAnnotations;
+using DevExpress.Persistent.Base;
 
 namespace Pets.Module.BusinessObjects {
-    // This code allows our Model Editor to get relevant EF Core metadata at design time.
-    // For details, please refer to https://supportcenter.devexpress.com/ticket/details/t933891.
+
+	public abstract class Pet
+	{
+
+		[Key] public int Id { get; set; }
+		public string Name { get; set; }
+		public int PetType { get; set; }
+
+	}
+	[NavigationItem("Pets")]
+	public class Cat : Pet {
+        public Cat() {
+		}
+    }
+	[NavigationItem("Pets")]
+	public class Dog : Pet { 
+	public Dog() { 
+		}
+	}
+
+
 	public class PetsContextInitializer : DbContextTypesInfoInitializerBase {
 		protected override DbContext CreateDbContext() {
 			var optionsBuilder = new DbContextOptionsBuilder<PetsEFCoreDbContext>()
@@ -31,6 +52,10 @@ namespace Pets.Module.BusinessObjects {
 	public class PetsEFCoreDbContext : DbContext {
 		public PetsEFCoreDbContext(DbContextOptions<PetsEFCoreDbContext> options) : base(options) {
 		}
+
+		public DbSet<Cat> Cats { get; set; }
+		public DbSet<Dog> Dogs { get; set; }
+
 		public DbSet<ModuleInfo> ModulesInfo { get; set; }
 		public DbSet<ModelDifference> ModelDifferences { get; set; }
 		public DbSet<ModelDifferenceAspect> ModelDifferenceAspects { get; set; }
@@ -44,7 +69,12 @@ namespace Pets.Module.BusinessObjects {
             modelBuilder.Entity<Pets.Module.BusinessObjects.ApplicationUserLoginInfo>(b => {
                 b.HasIndex(nameof(DevExpress.ExpressApp.Security.ISecurityUserLoginInfo.LoginProviderName), nameof(DevExpress.ExpressApp.Security.ISecurityUserLoginInfo.ProviderUserKey)).IsUnique();
             });
-        }
+			modelBuilder.Entity<Pet>()
+			  .HasDiscriminator(x => x.PetType)
+			  .HasValue<Cat>(1)
+			  .HasValue<Dog>(2);
+
+		}
 	}
 
     public class PetsAuditingDbContext : DbContext {
