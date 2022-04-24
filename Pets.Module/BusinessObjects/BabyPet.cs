@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pets.Module.BusinessObjects
 {
@@ -8,7 +9,11 @@ namespace Pets.Module.BusinessObjects
 
 
         [Key] public int Id { get; set; }
-        public Pet Parent { get; set; }
+
+        public int ParentPetId { get; set; }
+
+        [ForeignKey("ParentPetId")]
+        public virtual Pet Parent { get; set; }
         public string Name { get; set; }
         public bool? IsCat { get; set; }
 
